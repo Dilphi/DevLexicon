@@ -74,9 +74,28 @@ def main(page: ft.Page):
         page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
         page.update()
     
-    def change_python(e):
-        pass
-
+    
+    def show_language_info(language, description):
+        page.clean()
+        page.add(
+            ft.Column(
+                [
+                    ft.Text(language, size=20, weight=ft.FontWeight.BOLD),
+                    ft.Text(description),
+                    ft.OutlinedButton("Назад", on_click=lambda e: navigate(None))
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            )
+        )
+        page.update()
+    
+    languages = {
+        "JavaScript": "JavaScript — язык программирования для веб-разработки, используется в браузерах.",
+        "C#": "C# — язык программирования от Microsoft, используется для разработки игр и приложений.",
+        "C++": "C++ — мощный язык программирования, используется в разработке игр и ПО.",
+        "Python": "Python — универсальный язык программирования, удобный для начинающих.",
+        "SQL": "SQL — язык запросов для работы с базами данных."
+    }
     student_name = ft.TextField(label="Имя", width=150, on_change=validate)
     student_surname = ft.TextField(label="Фамилия", width=150, on_change=validate)
     student_group = ft.TextField(label="Группа", width=100, on_change=validate)
@@ -84,7 +103,6 @@ def main(page: ft.Page):
     btn_reg = ft.OutlinedButton(text="Добавить", width=200, on_click=register, disabled=True)
     btn_auth = ft.OutlinedButton(text="Войти", on_click=auth_student)
 
-    btn_python = ft.OutlinedButton(text="Питон", on_click=change_python)
 
         # Создаем row для темы
     theme = ft.Row(
@@ -136,20 +154,12 @@ def main(page: ft.Page):
         alignment=ft.MainAxisAlignment.CENTER
     )
 
-    panel_app =  ft.Row(
-        [   
-             
-            ft.Column(
-                [
-                    theme
-                ]
-            ),
-            ft.Column(
-                [
-                    ft.Text("Выберите что вам напомнить или чему научить"),
-                    btn_python
-                ]
-            )
+    panel_app = ft.Column(
+        [
+            theme,
+            ft.Text("Выберите язык программирования"),
+            *[ft.OutlinedButton(text=lang, on_click=lambda e, l=lang: show_language_info(l, languages[l])) for lang in languages.keys()],
+            ft.OutlinedButton(text="Пройти тест")
         ],
         alignment=ft.MainAxisAlignment.CENTER
     )
